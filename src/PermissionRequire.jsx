@@ -1,41 +1,53 @@
-import { useEffect, useState } from "react"
+import {useEffect, useState} from 'react';
 
-const { Text } = require("@rneui/base")
-const { View, PermissionsAndroid } = require("react-native")
+const {Text} = require('@rneui/base');
+const {View, PermissionsAndroid} = require('react-native');
 
-const PermissionRequire = () => {
-    const [permission, setPermission] = useState(false)
+import {makeAllFolder} from './utils/folderManage';
 
-    const requestPermission = async () => {
-        try {
-            const permissions = [
-                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-            ];
+const PermissionRequire = props => {
+  const {loading} = props;
 
-            const result = await PermissionsAndroid.requestMultiple(permissions)
+  const [permission, setPermission] = useState(true);
 
-            const allPermissionGranted = Object.values(result).every(
-                result => result === PermissionsAndroid.RESULTS.GRANTED
-            )
+  const requestPermission = async () => {
+    try {
+      const permissions = [
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      ];
 
-            if (allPermissionGranted) {
-                console.log("permission granted")
-            }
-        } catch (err) {
-            console.log('false')
-        }
+      const result = await PermissionsAndroid.requestMultiple(permissions);
+
+      const allPermissionGranted = Object.values(result).every(
+        result => result === PermissionsAndroid.RESULTS.GRANTED,
+      );
+
+      if (allPermissionGranted) {
+        console.log('permission granted');
+        // 创建资源文件夹
+        await makeAllFolder();
+        loading(false);
+      } else {
+        setPermission(false);
+      }
+    } catch (err) {
+      console.log(err);
     }
+  };
 
-    useEffect(() => {
-        requestPermission
-    }, [])
+  // 请求权限并创建初始文件夹
+  useEffect(() => {
+    requestPermission();
+  }, []);
 
-    return (
-        <View className="flex justify-center items-center h-full">
-            <Text>请求权限中</Text>
-        </View>
-    )
-}
+  return (
+    <View className="flex justify-center items-center h-full">
+      <Text>
+        {permission ? '权限请求中' : '权限请求失败，请手动更改储存权限'}
+      </Text>
+    </View>
+  );
+};
 
 export default PermissionRequire;
