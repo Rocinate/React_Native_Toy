@@ -1,5 +1,6 @@
 import {useState} from 'react';
-import {Text, TouchableHighlight, View} from 'react-native';
+import {Text, TouchableHighlight, View, TextInput} from 'react-native';
+import {Button} from '@rneui/themed'
 
 const Choose = props => {
   const {setMode} = props;
@@ -52,7 +53,6 @@ const ExamSign = props => {
     <>
       <TextInput
         placeholder="姓名"
-        style={styles.inputText}
         onChangeText={text => {
           setInfo(Object.assign(info, {name: text}));
         }}
@@ -71,18 +71,13 @@ const AdminSign = props => {
     <>
       <TextInput
         placeholder="密码"
-        style={styles.inputText}
-        onChangeText={text => setPassword(text)}
-        value={password}
+        onChangeText={text => {
+            setInfo(Object.assign(info, {password: text}));
+        }}
       />
       <Button
-        color={colors.brand.primary}
-        style={styles.checkButton}
         onPress={() => {
-          if (onAdminLogin(password)) {
-            loadPaperList();
-            navigation.navigate('ExamList');
-          }
+
         }}
         title="登录"
       />
@@ -96,7 +91,7 @@ const ExamScreen = () => {
   return (
     <View className="flex bg-white">
       {/* <Choose setMode={setMode}/> */}
-      <CheckIn mode={mode} setInfo={setInfo} />
+      <CheckIn mode={mode} setInfo={setInfo} info={info}/>
     </View>
   );
 };
