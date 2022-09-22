@@ -12,16 +12,15 @@ import {ThemeProvider, Button, createTheme, Text} from '@rneui/themed';
 import {View} from 'react-native';
 
 const TAB_ICON = {
-  文章: 'book',
-  测试: 'school',
-  视频: 'videocam',
+  防化教材: 'book',
+  模拟测试: 'school',
+  防化课堂: 'videocam',
 };
 
 const Tab = createBottomTabNavigator();
 
 const createScreenOptions = ({route}) => {
   const iconName = TAB_ICON[route.name];
-  console.log(iconName)
 
   return {
     tabBarIcon: ({size, color}) => (
@@ -40,15 +39,15 @@ const theme = createTheme({
 
 const Layout = () => {
   return (
-    // <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <NavigationContainer>
         <Tab.Navigator screenOptions={createScreenOptions}>
-          <Tab.Screen name="文章" component={ArticleScreen} />
-          <Tab.Screen name="测试" component={ExamScreen} />
-          <Tab.Screen name="视频" component={VideoScreen} />
+          <Tab.Screen name="防化教材" component={ArticleScreen} />
+          <Tab.Screen name="模拟测试" component={ExamScreen} />
+          <Tab.Screen name="防化课堂" component={VideoScreen} />
         </Tab.Navigator>
       </NavigationContainer>
-    // </ThemeProvider>
+    </ThemeProvider>
   );
 };
 

@@ -1,13 +1,13 @@
 import {useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import PermissionRequire from './src/PermissionRequire'
-import Layout from './src/page/Layout'
+import PermissionRequire from './src/PermissionRequire';
+import Layout from './src/page/Layout';
 
 const App = () => {
-  const [loading, setLoading] = useState(true);
+  const [ready, setReady] = useState(false);
   return (
     <SafeAreaProvider>
-        {loading ? <PermissionRequire loading={setLoading} /> : <Layout />}
+      {ready ? <Layout /> : <PermissionRequire setReady={setReady} />}
     </SafeAreaProvider>
   );
 };

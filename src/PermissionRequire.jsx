@@ -3,12 +3,18 @@ import {useEffect, useState} from 'react';
 const {Text} = require('@rneui/base');
 const {View, PermissionsAndroid} = require('react-native');
 
-import {makeAllFolder} from './utils/folderManage';
+import {isPathExist, initAssets} from './utils/fileSystem';
+
+const Status = {
+  getPermission: '权限请求中',
+  initAssets: '资源初始化，请稍等',
+  permissionFailed: '权限请求失败，请手动更改储存权限',
+};
 
 const PermissionRequire = props => {
-  const {loading} = props;
+  const {setReady} = props;
 
-  const [permission, setPermission] = useState(true);
+  const [progress, setProgress] = useState(Status.getPermission);
 
   const requestPermission = async () => {
     try {
@@ -25,11 +31,16 @@ const PermissionRequire = props => {
 
       if (allPermissionGranted) {
         console.log('permission granted');
-        // 创建资源文件夹
-        await makeAllFolder();
-        loading(false);
+
+        // check basic folder
+        if (!await isPathExist('')) {
+          setProgress(Status.initAssets);
+          await initAssets();
+        }
+
+        setReady(true);
       } else {
-        setPermission(false);
+        setProgress(Status.permissionFailed);
       }
     } catch (err) {
       console.log(err);
@@ -44,7 +55,11 @@ const PermissionRequire = props => {
   return (
     <View className="flex justify-center items-center h-full">
       <Text>
-        {permission ? '权限请求中' : '权限请求失败，请手动更改储存权限'}
+        {progress == Status.getPermission
+          ? '权限请求中'
+          : progress == Status.permissionFailed
+          ? '权限请求失败，请手动更改储存权限'
+          : '资源初始化，请稍等'}
       </Text>
     </View>
   );

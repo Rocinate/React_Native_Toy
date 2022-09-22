@@ -1,4 +1,4 @@
-export const BASE = '/StudyMaterials'
+export const BASE = '/Documents/StudyMaterials'
 
 export const FOLDER_PATH = {
   PAPER: '/paper',
