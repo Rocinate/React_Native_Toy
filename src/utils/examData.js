@@ -1,5 +1,7 @@
 import {readExcel} from './fileSystem';
 import XLSX from 'xlsx';
+import {FOLDER_PATH, BASE, PATH_TYPE} from '../config/config';
+import RNFS from 'react-native-fs';
 
 export const getQuestion = async () => {
   let workbook = await readExcel(questionPath + '/题库.xlsx');
@@ -96,6 +98,19 @@ export const deletePaper = async name => {
     });
   return res;
 };
+
+export const getSubject = async () => {
+  const fullPath = `${RNFS.ExternalStorageDirectoryPath}${BASE}${FOLDER_PATH.QUESTION}`
+  const list = await RNFS.readdir(fullPath)
+
+  let result = []
+
+  if (list && list.length > 0) {
+    result = list.map(item => item.split('.')[0])
+  }
+
+  return result
+}
 
 export const writePaper = async (data, name) => {
     const jsonStr = JSON.stringify(data);

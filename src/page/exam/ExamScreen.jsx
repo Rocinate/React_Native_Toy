@@ -1,99 +1,23 @@
-import {useState} from 'react';
-import {Text, TouchableHighlight, View, TextInput} from 'react-native';
-import {Button} from '@rneui/themed'
+import { createStackNavigator } from '@react-navigation/stack';
 
-const Choose = props => {
-  const {setMode} = props;
-  return (
-    <View className="flex-1 h-full justify-center items-center flex-row">
-      <TouchableHighlight
-        className="w-1/2 h-full"
-        underlayColor="#DDD"
-        onPress={() => {
-          setMode('exam');
-        }}>
-        <View className="flex items-center py-5 h-full justify-center">
-          <Text>我是考生</Text>
-        </View>
-      </TouchableHighlight>
-      <View className="h-full bg-zinc-200" style={{width: 1}}></View>
-      <TouchableHighlight
-        className="w-1/2"
-        underlayColor="#DDD"
-        onPress={() => {
-          setMode('admin');
-        }}>
-        <View className="flex items-center py-5 h-full justify-center">
-          <Text>我是考官</Text>
-        </View>
-      </TouchableHighlight>
-    </View>
-  );
-};
+import SignIn from './SignIn';
+import Admin from './Admin';
+import Exam from './Exam'
+import Finish from './Finish'
 
-const CheckIn = props => {
-  const {mode, info, setInfo} = props;
-  return (
-    <View className="flex h-full justify-center items-center">
-      <View>
-        <Text>{mode == 'exam' ? '考试系统登录' : '管理系统登录'}</Text>
-        {mode == 'exam' ? (
-          <ExamSign setInfo={setInfo} info={info}/>
-        ) : (
-          <AdminSign setInfo={setInfo} info={info}/>
-        )}
-      </View>
-    </View>
-  );
-};
-
-const ExamSign = props => {
-  const {info, setInfo} = props;
-  return (
-    <>
-      <TextInput
-        placeholder="姓名"
-        onChangeText={text => {
-          setInfo(Object.assign(info, {name: text}));
-        }}
-      />
-      <Button
-        onPress={() => {}}
-        title="开始"
-      />
-    </>
-  );
-};
-
-const AdminSign = props => {
-  const {info, setInfo} = props;
-  return (
-    <>
-      <TextInput
-        placeholder="密码"
-        onChangeText={text => {
-            setInfo(Object.assign(info, {password: text}));
-        }}
-      />
-      <Button
-        onPress={() => {
-
-        }}
-        title="登录"
-      />
-    </>
-  );
-};
+const Stack = createStackNavigator()
 
 const ExamScreen = () => {
-  const [mode, setMode] = useState('');
-  const [info, setInfo] = useState({});
-  return (
-    <View className="flex bg-white">
-      {/* <Choose setMode={setMode}/> */}
-      <CheckIn mode={mode} setInfo={setInfo} info={info}/>
-    </View>
-  );
-};
+    return (
+        <Stack.Navigator screenOptions={{
+            headerShown: false
+        }}>
+            <Stack.Screen name="SignIn" component={SignIn}/>
+            <Stack.Screen name="Exam" component={Exam}/>
+            <Stack.Screen name="Admin" component={Admin}/>
+            <Stack.Screen name="Finish" component={Finish}/>
+        </Stack.Navigator>
+    )
+}
 
-export default ExamScreen;
+export default ExamScreen
