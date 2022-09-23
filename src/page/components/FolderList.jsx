@@ -11,7 +11,7 @@ const Empty = () => {
 };
 
 const FolderList = props => {
-  const {data, setFolderPath} = props;
+  const {data, navigation} = props;
 
   return (
     <>
@@ -25,7 +25,7 @@ const FolderList = props => {
                 className="w-1/6"
                 key={item.name}
                 onPress={() => {
-                  setFolderPath(item.path);
+                  navigation.navigate('文件列表', {path: item.path});
                 }}
                 underlayColor="#DDD">
                 <View className="flex items-center py-5">

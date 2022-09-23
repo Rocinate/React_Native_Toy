@@ -1,22 +1,38 @@
-import {readExcel} from './fileSystem';
 import XLSX from 'xlsx';
-import {FOLDER_PATH, BASE, PATH_TYPE} from '../config/config';
+import {FOLDER_PATH, BASE} from '../config/config';
 import RNFS from 'react-native-fs';
+import {isPathExist} from './fileSystem'
 
-export const getQuestion = async () => {
-  let workbook = await readExcel(questionPath + '/题库.xlsx');
+export const getQuestion = async (type) => {
+  let workbook = await readExcel(`${type}.xlsx`);
   // 储存解析结果
   let questions = {
     choices: [],
+    multiChoices: [],
     complete: [],
     judgement: [],
     subjective: [],
   };
   // 选择题
-  let worksheet = workbook.Sheets['选择题'];
+  let worksheet = workbook.Sheets['单选题'];
   let jsonForm = XLSX.utils.sheet_to_json(worksheet);
   jsonForm.forEach(item => {
     questions.choices.push({
+      title: item['题目'],
+      right: item['答案'],
+      options: [
+        {key: 'A', value: item.A},
+        {key: 'B', value: item.B},
+        {key: 'C', value: item.C},
+        {key: 'D', value: item.D},
+      ],
+    });
+  });
+  // 多选题
+  worksheet = workbook.Sheets['多选题'];
+  jsonForm = XLSX.utils.sheet_to_json(worksheet);
+  jsonForm.forEach(item => {
+    questions.multiChoices.push({
       title: item['题目'],
       right: item['答案'],
       options: [
@@ -62,7 +78,7 @@ export const loadPaperDetail = async (
   failCb = undefined,
 ) => {
   const fullPath = `${RNFS.DocumentDirectoryPath}${BASE}${FOLDER_PATH.PAPER}/${name}`;
-  const isExist = await this.isFileExist(fullPath);
+  const isExist = await isPathExist(fullPath);
 
   if (!isExist) {
     return false;
@@ -82,7 +98,7 @@ export const loadPaperDetail = async (
 
 // 删除试卷
 export const deletePaper = async name => {
-  const fullPath = `${RNFS.DocumentDirectoryPath}${BASE}${FOLDER_PATH.PAPER}/${name}`;
+  const fullPath = `${RNFS.ExternalStorageDirectoryPath}${BASE}${FOLDER_PATH.PAPER}/${name}`;
   const isExist = await this.isFileExist(fullPath);
 
   if (!isExist) {

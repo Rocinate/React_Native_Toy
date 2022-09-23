@@ -15,15 +15,13 @@ const Empty = () => {
 };
 
 const FileList = props => {
-  const {path, setFilePath} = props;
+  const {navigator, route} = props;
+  const path = route.params.path;
   const [loading, setLoading] = useState(true);
   const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
-    getRootFiles()
     getPathList(path, PATH_TYPE.FILE).then(res => {
-      console.log(path)
-      // console.log(res)
       setFileList(res);
       setLoading(false);
     });
@@ -37,13 +35,22 @@ const FileList = props => {
         <Empty />
       ) : (
         <ScrollView>
-          {fileList.map(item => (
-            <ListItem key={item.name}>
-              <Button>
-                <Icon name="pdffile1" />
-              </Button>
-            </ListItem>
-          ))}
+          <View className="flex-1 p-5 w-full flex-wrap flex-row">
+            {fileList.map(item => (
+              <TouchableHighlight
+                className="w-1/6"
+                key={item.name}
+                onPress={() => {
+                  navigation.navigate('文件预览', {path: item.path});
+                }}
+                underlayColor="#DDD">
+                <View className="flex items-center py-5">
+                  <Icon name="pdffile1" size={60} />
+                  <Text>{item.name}</Text>
+                </View>
+              </TouchableHighlight>
+            ))}
+          </View>
         </ScrollView>
       )}
     </>

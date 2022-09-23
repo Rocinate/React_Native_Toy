@@ -9,10 +9,8 @@ import FolderList from '../components/FolderList';
 import FileList from '../components/FileList';
 import {Header} from '@rneui/themed';
 
-const ArticleScreen = () => {
+const ArticleScreen = ({navigation}) => {
   const [folderList, setFolderList] = useState([]);
-  const [folderPath, setFolderPath] = useState('');
-  const [filePath, setFilePath] = useState('');
   const [loading, setLoading] = useState(true);
 
   // 获取文件夹列表
@@ -25,14 +23,10 @@ const ArticleScreen = () => {
 
   return (
     <View className="flex w-full bg-white">
-      {filePath ? (
-        <FileViewer path={filePath} />
-      ) : folderPath ? (
-        <FileList path={folderPath} setFilePath={setFilePath} />
-      ) : loading ? (
+      {loading ? (
         <LoadingPage />
       ) : (
-        <FolderList data={folderList} setFolderPath={setFolderPath} />
+        <FolderList data={folderList} navigation={navigation}/>
       )}
     </View>
   );

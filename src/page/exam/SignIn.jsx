@@ -1,92 +1,89 @@
 import {useEffect, useState} from 'react';
-import {Text, TouchableHighlight, View, TextInput, Picker} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
+import {Text, View, TextInput} from 'react-native';
 import {Button} from '@rneui/themed';
-import {getSubject} from '../../utils/examData'
-
-const Choose = props => {
-  const {setMode} = props;
-  return (
-    <View className="flex-1 h-full justify-center items-center flex-row">
-      <TouchableHighlight
-        className="w-1/2 h-full"
-        underlayColor="#DDD"
-        onPress={() => {
-          setMode('exam');
-        }}>
-        <View className="flex items-center py-5 h-full justify-center">
-          <Text>我是考生</Text>
-        </View>
-      </TouchableHighlight>
-      <View className="h-full bg-zinc-200" style={{width: 1}}></View>
-      <TouchableHighlight
-        className="w-1/2"
-        underlayColor="#DDD"
-        onPress={() => {
-          setMode('admin');
-        }}>
-        <View className="flex items-center py-5 h-full justify-center">
-          <Text>我是考官</Text>
-        </View>
-      </TouchableHighlight>
-    </View>
-  );
-};
-
+import {getSubject} from '../../utils/examData';
+import {adminPass} from '../../config/config';
 
 const partition = {
-    'exam' : {
-        'title': '考试系统登录',
-        'placeholder': '姓名',
-        'buttonInfo': '开始',
-        'navigate': '/exam'
-    },
-    'admin': {
-        'title': '管理系统登录',
-        'placeholder': '密码',
-        'buttonInfo': '登录',
-        'navigate': '/admin'
-    }
-}
+  exam: {
+    title: '考试系统登录',
+    placeholder: '姓名',
+    buttonInfo: '开始',
+    navigate: 'exam',
+  },
+  admin: {
+    title: '管理系统登录',
+    placeholder: '密码',
+    buttonInfo: '登录',
+    navigate: 'admin',
+  },
+};
 
-const CheckIn = props => {
-  const {mode, info, setInfo} = props;
-  const [subject, setSubject] = useState([])
+const SignIn = ({navigation, route}) => {
+  const mode = route.params.mode
+  const [info, setInfo] = useState({});
+  const [subject, setSubject] = useState([]);
+  const [error, setError] = useState('');
+
+  const checkInfo = () => {
+    setError('');
+    if (mode === 'exam') {
+      info.name && info.subject && navigation.navigate('考试', info);
+      setError('请填写完整信息');
+    } else if (mode === 'admin' && info.password === adminPass) {
+      navigation.navigate('试卷管理', info);
+    } else {
+      setError('密码错误');
+    }
+  };
+
   useEffect(() => {
-    getSubject().then(res => {
-      res.length && setSubject(res)
-    })
-  })
+    if (mode === 'exam') {
+      getSubject().then(res => {
+        res.length && setSubject(res);
+      });
+    }
+  });
+
   return (
     <View className="flex h-full justify-center items-center">
       <View className="flex items-center">
         <Text className="text-xl">{partition[mode].title}</Text>
         <TextInput
-          className='border my-4 w-60 rounded'
+          className="border my-4 w-60 rounded"
           placeholder={partition[mode].placeholder}
+          type={mode == 'exam' ? 'text' : 'password'}
           onChangeText={text => {
-            setInfo(Object.assign(info, {password: text}));
+            if (mode == 'exam') {
+              setInfo(Object.assign(info, {name: text}));
+            } else {
+              setInfo({password: text});
+            }
           }}
         />
-        {mode == 'exam' ? <Picker onValueChange={(itemValue, itemIndex) => {
-          setInfo(Object.assign(info, {subject: itemValue}))
-        }}>
-          {subject.map((item) => (
-            <Picker.Item label={item} value={item} key={item}/>
-          ))}
-        </Picker> : <></>}
-        <Button size="md" buttonStyle={{width: 150}} onPress={() => {}} title={partition[mode].buttonInfo} />
+        {mode == 'exam' ? (
+          <Picker
+            onValueChange={(itemValue, itemIndex) => {
+              setInfo(Object.assign(info, {subject: itemValue}));
+            }}>
+            {subject.map(item => (
+              <Picker.Item label={item} value={item} key={item} />
+            ))}
+          </Picker>
+        ) : (
+          <></>
+        )}
+        <Text>{error}</Text>
+        <View>
+          <Button
+            size="md"
+            buttonStyle={{width: 150}}
+            onPress={checkInfo}
+            title={partition[mode].buttonInfo}
+          />
+        </View>
       </View>
-    </View>
-  );
-};
-
-const SignIn = () => {
-  const [mode, setMode] = useState('exam');
-  const [info, setInfo] = useState({});
-  return (
-    <View className="flex bg-white">
-      {/* <Choose setMode={setMode}/> */}
-      <CheckIn mode={mode} setInfo={setInfo} info={info} />
     </View>
   );
 };

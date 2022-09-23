@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 
 import { View, StyleSheet, Text } from 'react-native'
 
-export const Finish = ({navigation}) => {
+const Finish = ({navigation}) => {
     const [second, setSecond] = useState(5)
     let timerId = null
 
@@ -39,3 +39,5 @@ const styles = StyleSheet.create({
         fontSize: 20
     }
 })
+
+export default Finish
