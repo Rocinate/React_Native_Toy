@@ -1,13 +1,24 @@
-import {View, Text} from 'react-native'
+import {TouchableHighlight} from 'react-native';
+import Video from 'react-native-video';
 
-const FileViewer = (props) => {
-    const {path} = props;
+const FileViewer = ({navigation, route}) => {
+  const path = route.params.path;
+  const [paused, setPaused] = useState(false);
+  const source = {uri: path};
+  return (
+    <TouchableHighlight
+      onPress={() => setPaused(!paused)}
+      underlayColor="#DDD"
+      className="w-full v-full">
+      <Video
+        source={source}
+        paused={paused}
+        resizeMode="contain"
+        className="w-full v-full"
+      />
+    </TouchableHighlight>
+  );
 
-    return (
-        <View>
-            <Text>{path}</Text>
-        </View>
-    )
-}
+};
 
 export default FileViewer;
