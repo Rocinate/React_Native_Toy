@@ -4,7 +4,7 @@ import {
   View,
   StyleSheet,
   TouchableHighlight,
-  ScrollView,
+  ScrollView
 } from 'react-native';
 
 import { Button, Search} from '@rneui/themed';
