@@ -1,25 +1,55 @@
 import {useEffect, useState} from 'react';
-import {
-  Text,
-  View,
-  TouchableHighlight,
-  ScrollView,
-} from 'react-native';
+import {Text, View, TouchableHighlight, ScrollView} from 'react-native';
+import LoadingPage from '../components/LoadingPage';
 
-import {Button, Search} from '@rneui/themed';
-import {getPathList} from '../../utils/fileSystem'
-import { PATH_TYPE, FOLDER_PATH } from '../../config/config';
+import {Button, SearchBar} from '@rneui/themed';
+import {getPathList} from '../../utils/fileSystem';
+import {PATH_TYPE, FOLDER_PATH} from '../../config/config';
+
+const Empty = () => {
+  return (
+    <View className="flex-1 h-full justify-center items-center">
+      <Text>暂无考试记录</Text>
+    </View>
+  );
+};
 
 const Admin = ({navigation}) => {
-  const [paperList, setPaperList] = useState([])
+  const [paperList, setPaperList] = useState([]);
+  const [searchList, setSearchList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+
+  const updateSearch = (search) => {
+    setSearch(search);
+  }
 
   useEffect(() => {
     getPathList(FOLDER_PATH.PAPER, PATH_TYPE.FILE).then(res => {
-      setPaperList(res)
-    })
+      // setPaperList(res);
+      setPaperList(res);
+      setSearchList([1, 2]);
+      setLoading(false);
+    });
   }, []);
   return (
-    <View></View>
+    <>
+      {loading ? (
+        <LoadingPage />
+      ) : searchList.length == 0 ? (
+        <Empty />
+      ) : (
+        <>
+          <SearchBar
+            placeholder="姓名"
+            onChangeText={updateSearch}
+            value={search}
+            lightTheme
+          />
+        </>
+      )}
+    </>
     // <View style={styles.container}>
     //   <Search />
     //   <ScrollView>
@@ -67,4 +97,4 @@ const Admin = ({navigation}) => {
   );
 };
 
-export default Admin
+export default Admin;

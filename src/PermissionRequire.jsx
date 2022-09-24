@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 const {Text} = require('@rneui/base');
 const {View, PermissionsAndroid} = require('react-native');
 
-import {isPathExist, initAssets} from './utils/fileSystem';
+import {isPathExist, initAssets, createTemplate} from './utils/fileSystem';
 
 const Status = {
   getPermission: '权限请求中',

@@ -4,6 +4,7 @@ import {Text, View, TextInput} from 'react-native';
 import {Button} from '@rneui/themed';
 import {getSubject} from '../../utils/examData';
 import {adminPass} from '../../config/config';
+import {StackActions} from '@react-navigation/native';
 
 const partition = {
   exam: {
@@ -21,18 +22,25 @@ const partition = {
 };
 
 const SignIn = ({navigation, route}) => {
-  const mode = route.params.mode
-  const [info, setInfo] = useState({});
+  const mode = route.params.mode;
+  const [password, setPassword] = useState('');
+  const [userName, setUserName] = useState('');
+  const [selected, setSelected] = useState('');
   const [subject, setSubject] = useState([]);
   const [error, setError] = useState('');
 
   const checkInfo = () => {
     setError('');
     if (mode === 'exam') {
-      info.name && info.subject && navigation.navigate('考试', info);
+      if (userName && selected) {
+        navigation.dispatch(StackActions.replace('考试'), {
+          name: userName,
+          subject: selected,
+        });
+      }
       setError('请填写完整信息');
-    } else if (mode === 'admin' && info.password === adminPass) {
-      navigation.navigate('试卷管理', info);
+    } else if (mode === 'admin' && password === adminPass) {
+      navigation.dispatch(StackActions.replace('试卷管理'));
     } else {
       setError('密码错误');
     }
@@ -44,7 +52,7 @@ const SignIn = ({navigation, route}) => {
         res.length && setSubject(res);
       });
     }
-  });
+  }, []);
 
   return (
     <View className="flex h-full justify-center items-center">
@@ -53,24 +61,28 @@ const SignIn = ({navigation, route}) => {
         <TextInput
           className="border my-4 w-60 rounded"
           placeholder={partition[mode].placeholder}
-          type={mode == 'exam' ? 'text' : 'password'}
+          secureTextEntry={mode == 'admin'}
           onChangeText={text => {
             if (mode == 'exam') {
-              setInfo(Object.assign(info, {name: text}));
+              setUserName(text);
             } else {
-              setInfo({password: text});
+              setPassword(text);
             }
           }}
         />
         {mode == 'exam' ? (
-          <Picker
-            onValueChange={(itemValue, itemIndex) => {
-              setInfo(Object.assign(info, {subject: itemValue}));
-            }}>
-            {subject.map(item => (
-              <Picker.Item label={item} value={item} key={item} />
-            ))}
-          </Picker>
+          <View className="w-60 border rounded">
+            <Picker
+              selectedValue={selected}
+              onValueChange={(itemValue, itemIndex) => {
+                setSelected(itemValue);
+              }}>
+              <Picker.Item label="请选择科目" value={-1} enabled={false} />
+              {subject.map(item => (
+                <Picker.Item label={item} value={item} />
+              ))}
+            </Picker>
+          </View>
         ) : (
           <></>
         )}

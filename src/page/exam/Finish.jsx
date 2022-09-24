@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
-
 import { View, StyleSheet, Text } from 'react-native'
+import { StackActions } from '@react-navigation/native';
 
 const Finish = ({navigation}) => {
     const [second, setSecond] = useState(5)
@@ -9,7 +9,7 @@ const Finish = ({navigation}) => {
     useEffect(() => {
         (function timer (num){
             if (num == 0) {
-                navigation.navigate("Choose")
+                navigation.dispatch(StackActions.popToTop());
             }
             setTimeout(function() {
                 setSecond(num-1)

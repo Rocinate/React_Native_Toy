@@ -1,11 +1,12 @@
 import {View} from 'react-native';
-import {questionType} from '../../config/config';
 import {Quiz} from './components/Quiz';
 import {Timer} from './components/Timer';
-import {generatePaper} from '../../utils/examData';
+import Paper from '../../utils/paper';
+import {writePaper} from '../../utils/examData'
 
 import {useEffect, useState} from 'react';
 import {Button} from '@rneui/themed';
+import { StackActions } from '@react-navigation/native';
 
 const Status = ({index, count}) => {
   return (
@@ -16,19 +17,21 @@ const Status = ({index, count}) => {
   );
 };
 
-const Exam = props => {
-  const {mode, data, subject} = props;
-  const [paper, setPaper] = useState({});
+const Exam = ({navigation, route}) => {
+  const name = route.params.name;
+  const subject = route.params.subject;
+  const data = route.params.paper;
+
+  const [paper, setPaper] = useState(null);
   const [index, setIndex] = useState(0);
 
   // 随机生成试卷
   useEffect(() => {
-    if (mode == 'normal') {
-      generatePaper(subject).then(res => {
-        setPaper(res);
-      });
+    if (data) {
+      setPaper(new Paper(data));
     } else {
-      setPaper(data);
+      const temp = new Paper();
+      temp.randomInit(subject).then(res => setPaper(temp));
     }
   }, []);
 
@@ -59,7 +62,11 @@ const Exam = props => {
             <Button
               className="w-1/3"
               type="solid"
-              onPress={() => submit()}
+              onPress={() => {
+                writePaper(paper, name).then(res => {
+                  navigation.navigation(StackActions.replace('完成'))
+                })
+              }}
               disabled={
                 index != paper.questions.length &&
                 paper.questions[index].user.length

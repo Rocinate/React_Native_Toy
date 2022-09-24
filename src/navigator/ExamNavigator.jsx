@@ -11,7 +11,7 @@ const Stack = createStackNavigator()
 const ExamScreen = () => {
     return (
         <Stack.Navigator screenOptions={{
-            headerShown: true,
+            headerShown: true
         }}>
             <Stack.Screen name="测试" component={Choose}/>
             <Stack.Screen name="登录" component={SignIn}/>

@@ -46,9 +46,9 @@ class Paper {
     this.questions[index].user = user;
   }
 
-  async randomInit() {
+  async randomInit(type) {
     // 调用getQuestion, 扫描题库，分种类
-    let questionBank = await getQuestion();
+    let questionBank = await getQuestion(type);
     let selectedIndex = [];
     let questions = [];
 
