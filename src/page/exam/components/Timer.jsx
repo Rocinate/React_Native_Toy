@@ -1,21 +1,24 @@
-import { useEffect, useState } from 'react'
-import {View} from 'react-native'
+import {useEffect, useState} from 'react';
+import {View, Text} from 'react-native';
 
-const Timer = () => {
-    const [timer, setTimer] = useState(null)
-    const [timerId, setTimerId] = useState(null)
-    const endTime = new Date().getTime() + 1 * 60 * 60 * 1000
+const Timer = ({timeEnd}) => {
+  const [second, setSecond] = useState(60 * 60);
 
-    useEffect(() => {
-        if (timerId == null) {
-            setTimerId(setInterval(() => {
-                setTimer(endTime - new Date().getTime())
-            }, 500))
-        }
-    }, [])
-    return (
-        <View></View>
-    )
-}
+  useEffect(() => {
+    (function timer(num) {
+      if (second == 0) {
+        timeEnd();
+      }
+      setTimeout(function () {
+        setSecond(num - 1);
+      }, 1000);
+    })(second);
+  }, [second]);
+  return (
+    <View>
+      <Text>{`${parseInt(second/60)}:${second%60}`}</Text>
+    </View>
+  );
+};
 
 export default Timer;

@@ -4,16 +4,16 @@ import {ButtonGroup} from '@rneui/themed';
 
 const Choice = ({paper, mode, setPaper, index}) => {
   const question = paper.questions[index];
-  const disabled = mode == 'exam' ? false : true;
+  const disabled = mode == 'normal' ? false : true;
 
-  if (question.answer.length > 1) {
+  if (question.type == questionType.CHOICES) {
     return (
       <View>
         <Text>单选题</Text>
         <Text>{question.title}</Text>
         <ButtonGroup
           disabled={disabled}
-          buttons={question.options}
+          buttons={question.options.map(item => `${item.key}. ${item.value}`)}
           selectedIndex={question.user}
           onPress={value => {
             setSelectedIndex(value);
@@ -45,7 +45,7 @@ const Choice = ({paper, mode, setPaper, index}) => {
 
 const Complete = ({paper, mode, setPaper, index}) => {
   const question = paper.questions[index];
-  const enabled = mode == 'exam' ? true : false;
+  const enabled = mode == 'normal' ? true : false;
 
   let part = question.title.split('_').filter(item => item);
 
@@ -90,7 +90,7 @@ const Complete = ({paper, mode, setPaper, index}) => {
 
 const Judgement = ({paper, mode, setPaper, index}) => {
   const question = paper.questions[index];
-  const disabled = mode == 'exam' ? false : true;
+  const disabled = mode == 'normal' ? false : true;
 
   return (
     <View>
@@ -112,7 +112,7 @@ const Judgement = ({paper, mode, setPaper, index}) => {
 
 const Subjective = ({paper, mode, setPaper, index}) => {
   const question = paper.questions[index];
-  const enabled = mode == 'exam' ? true : false;
+  const enabled = mode == 'normal' ? true : false;
 
   return (
     <View>

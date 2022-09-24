@@ -1,10 +1,10 @@
 import XLSX from 'xlsx';
 import {FOLDER_PATH, BASE} from '../config/config';
 import RNFS from 'react-native-fs';
-import {isPathExist} from './fileSystem'
+import {isPathExist, getFullPath} from './fileSystem'
 
 export const getQuestion = async (type) => {
-  let workbook = await readExcel(`${type}.xlsx`);
+  let workbook = await readExcel(`${FOLDER_PATH.QUESTION}/${type}.xlsx`);
   // 储存解析结果
   let questions = {
     choices: [],
@@ -140,20 +140,20 @@ export const writePaper = async (data, name) => {
       part[2] = 1;
       part[3] = score;
       data.fileName = part.join('-');
-      filePath = `${paperPath}/${data.fileName}`;
+      filePath = `${getFullPath(FOLDER_PATH.PAPER)}/${data.fileName}`;
     } else {
       let score = data.score.reduce(function (acr, cur) {
         return acr + cur;
       });
-      filePath = `${paperPath}/${name}-${new Date().getTime()}-${0}-${score}.json`;
+      filePath = `${getFullPath(FOLDER_PATH.PAPER)}/${name}-${new Date().getTime()}-${0}-${score}.json`;
     }
     // 文件写入
     return await RNFS.writeFile(filePath, jsonStr, 'utf8');
   };
 
   export const readExcel = async path => {
-    const bstr = await RNFS.readFile(path, 'ascii');
+    const fullPath = getFullPath(path)
+    const bstr = await RNFS.readFile(fullPath, 'ascii');
     const workBook = XLSX.read(bstr, {type: 'binary'});
     return workBook;
   };
-  

@@ -33,10 +33,11 @@ const SignIn = ({navigation, route}) => {
     setError('');
     if (mode === 'exam') {
       if (userName && selected) {
-        navigation.dispatch(StackActions.replace('考试'), {
+        navigation.dispatch(StackActions.replace('考试', {
           name: userName,
           subject: selected,
-        });
+          mode: 'normal'
+        }));
       }
       setError('请填写完整信息');
     } else if (mode === 'admin' && password === adminPass) {
@@ -59,7 +60,7 @@ const SignIn = ({navigation, route}) => {
       <View className="flex items-center">
         <Text className="text-xl">{partition[mode].title}</Text>
         <TextInput
-          className="border my-4 w-60 rounded"
+          className="border my-4 w-60 rounded pl-4"
           placeholder={partition[mode].placeholder}
           secureTextEntry={mode == 'admin'}
           onChangeText={text => {
@@ -79,7 +80,7 @@ const SignIn = ({navigation, route}) => {
               }}>
               <Picker.Item label="请选择科目" value={-1} enabled={false} />
               {subject.map(item => (
-                <Picker.Item label={item} value={item} />
+                <Picker.Item label={item} value={item} key={item}/>
               ))}
             </Picker>
           </View>

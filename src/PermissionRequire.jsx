@@ -37,7 +37,6 @@ const PermissionRequire = props => {
           setProgress(Status.initAssets);
           await initAssets();
         }
-
         setReady(true);
       } else {
         setProgress(Status.permissionFailed);

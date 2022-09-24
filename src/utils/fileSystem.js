@@ -33,13 +33,6 @@ export const isPathExist = async (path, cb = undefined) => {
   });
 };
 
-export const getRootFiles = async () => {
-  const fullPath = getFullPath(RNFS.ExternalStorageDirectoryPath);
-  return await RNFS.readDir(fullPath).then(res => {
-    console.log(res);
-  });
-};
-
 export const initAssets = async () => {
   try {
     await makeFolder('');
@@ -69,7 +62,7 @@ export const makeFolder = async path => {
   return await RNFS.mkdir(fullPath);
 };
 
-const getFullPath = path => {
+export const getFullPath = path => {
   let fullPath = '';
   if (path.indexOf(RNFS.ExternalStorageDirectoryPath) !== -1) {
     fullPath = path;

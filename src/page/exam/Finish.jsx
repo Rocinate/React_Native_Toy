@@ -4,7 +4,6 @@ import { StackActions } from '@react-navigation/native';
 
 const Finish = ({navigation}) => {
     const [second, setSecond] = useState(5)
-    let timerId = null
 
     useEffect(() => {
         (function timer (num){
@@ -17,11 +16,7 @@ const Finish = ({navigation}) => {
           }
           )(second)
     }, [second])
-    useEffect(() => {
-        return () => {
-            clearInterval(timerId)
-        }
-    }, [])
+
     return (
         <View style={styles.container}>
             <Text style={styles.info}>答题已完成，将在{second}秒后回到登录界面</Text>
