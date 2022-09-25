@@ -56,7 +56,7 @@ const SignIn = ({navigation, route}) => {
   }, []);
 
   return (
-    <View className="flex h-full justify-center items-center">
+    <View className="flex h-full justify-center items-center bg-white">
       <View className="flex items-center">
         <Text className="text-xl">{partition[mode].title}</Text>
         <TextInput

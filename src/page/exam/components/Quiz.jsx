@@ -1,87 +1,114 @@
-import {View, Text} from 'react-native';
+import {useState, useEffect} from 'react';
+import {View, Text, TextInput} from 'react-native';
 import {questionType} from '../../../config/config';
 import {ButtonGroup} from '@rneui/themed';
 
 const Choice = ({paper, mode, setPaper, index}) => {
   const question = paper.questions[index];
   const disabled = mode == 'normal' ? false : true;
+  const [answer, setAnswer] = useState('');
 
-  if (question.type == questionType.CHOICES) {
-    return (
-      <View>
-        <Text>单选题</Text>
-        <Text>{question.title}</Text>
-        <ButtonGroup
-          disabled={disabled}
-          buttons={question.options.map(item => `${item.key}. ${item.value}`)}
-          selectedIndex={question.user}
-          onPress={value => {
-            setSelectedIndex(value);
-          }}
-          containerStyle={{marginBottom: 20}}
-        />
-      </View>
+  useEffect(() => {
+    setAnswer(paper.questions[index].user.charCodeAt() - 65);
+  }, [index]);
+
+  return (
+    <View>
+      <Text className="text-xl text-center mb-5">单选题</Text>
+      <Text>{index+1}.{question.title}</Text>
+      <ButtonGroup
+        disabled={disabled}
+        buttons={question.options.map(item => `${item.key}. ${item.value}`)}
+        selectedIndex={answer}
+        onPress={value => {
+          setAnswer(value);
+          paper.answer(index, String.fromCharCode(65 + value));
+          setPaper(paper);
+        }}
+        containerStyle={{marginBottom: 20, marginTop: 20}}
+      />
+    </View>
+  );
+};
+
+const MultiChoices = ({paper, mode, setPaper, index}) => {
+  const question = paper.questions[index];
+  const disabled = mode == 'normal' ? false : true;
+  const [answer, setAnswer] = useState('');
+
+  useEffect(() => {
+    setAnswer(
+      paper.questions[index].user.split('').map(item => item.charCodeAt() - 65),
     );
-  } else {
-    return (
-      <View>
-        <Text>多选题</Text>
-        <Text>{question.title}</Text>
-        <ButtonGroup
-          disabled={disabled}
-          buttons={question.options}
-          selectMultiple
-          selectedIndexes={question.user}
-          onPress={value => {
-            paper.questions[index].user = value;
-            setPaper(paper);
-          }}
-          containerStyle={{marginBottom: 20}}
-        />
-      </View>
-    );
-  }
+  }, [index]);
+
+  return (
+    <View>
+      <Text className="text-xl text-center mb-5">多选题</Text>
+      <Text>{index+1}.{question.title}</Text>
+      <ButtonGroup
+        disabled={disabled}
+        buttons={question.options.map(item => `${item.key}. ${item.value}`)}
+        selectMultiple
+        selectedIndexes={answer}
+        onPress={value => {
+          setAnswer(value);
+          const user = value.map(item => String.fromCharCode(65 + item));
+          paper.answer(index, user.join(''));
+          setPaper(paper);
+        }}
+        containerStyle={{marginBottom: 20, marginTop: 20}}
+      />
+    </View>
+  );
 };
 
 const Complete = ({paper, mode, setPaper, index}) => {
   const question = paper.questions[index];
   const enabled = mode == 'normal' ? true : false;
+  const [answer, setAnswer] = useState('');
+  const part = question.title.split('_').filter(item => item);
 
-  let part = question.title.split('_').filter(item => item);
+  useEffect(() => {
+    setAnswer(paper.questions[index].user);
+  }, [index]);
 
   return (
     <View>
-      <View>
-        <Text className="flex-wrap">
-          {part[0]}
-          <Text className="text-red-500">①</Text>
-          {part[1]}
-          <Text className="text-red-500">②</Text>
-          {part[2]}
-        </Text>
-      </View>
-      <View>
+      <Text className="text-xl text-center mb-5">填空题</Text>
+      <Text className="flex-wrap">
+      {index+1}.{part[0]}
+        <Text className="text-red-500">①</Text>
+        {part[1]}
+        <Text className="text-red-500">②</Text>
+        {part[2]}
+      </Text>
+      <View className="flex flex-row items-center mt-5">
         <Text>①</Text>
         <TextInput
+          className="w-full p-0 pl-2 m-0 border-b-slate-900 border-b"
           enabled={enabled}
-          mode="outlined"
+          dense={true}
           onChangeText={text => {
-            paper.questions[index].user[0] = text;
+            setAnswer([text, answer[1]]);
+            paper.answer(index, [text, answer[1]]);
             setPaper(paper);
           }}
-          value={question.user[0]}
+          value={answer[0]}
         />
       </View>
-      <View>
+      <View className="flex flex-row items-center my-5">
         <Text>②</Text>
         <TextInput
+          className="w-full p-0 m-0 pl-2 border-b-slate-900 border-b"
           enabled={enabled}
           mode="outlined"
           onChangeText={text => {
-            paper.questions[index].user[1] = text;
+            setAnswer([answer[0], text]);
+            paper.answer(index, [answer[0], text]);
             setPaper(paper);
           }}
-          value={question.user[1]}
+          value={answer[1]}
         />
       </View>
     </View>
@@ -91,20 +118,26 @@ const Complete = ({paper, mode, setPaper, index}) => {
 const Judgement = ({paper, mode, setPaper, index}) => {
   const question = paper.questions[index];
   const disabled = mode == 'normal' ? false : true;
+  const [answer, setAnswer] = useState('');
+
+  useEffect(() => {
+    setAnswer(question.options.indexOf(paper.questions[index].user));
+  }, [index]);
 
   return (
     <View>
-      <Text>{question.title}</Text>
+      <Text className="text-xl text-center mb-5">判断题</Text>
+      <Text>{index+1}.{question.title}</Text>
       <ButtonGroup
         disabled={disabled}
         buttons={question.options}
-        selectMultiple
-        selectedIndexes={question.user}
+        selectedIndex={answer}
         onPress={value => {
-          paper.questions[index].user = value;
+          setAnswer(value);
+          paper.answer(index, question.options[value]);
           setPaper(paper);
         }}
-        containerStyle={{marginBottom: 20}}
+        containerStyle={{marginBottom: 20, marginTop: 20}}
       />
     </View>
   );
@@ -113,20 +146,29 @@ const Judgement = ({paper, mode, setPaper, index}) => {
 const Subjective = ({paper, mode, setPaper, index}) => {
   const question = paper.questions[index];
   const enabled = mode == 'normal' ? true : false;
+  const [answer, setAnswer] = useState('');
+
+  useEffect(() => {
+    setAnswer(paper.questions[index].user);
+  }, [index]);
 
   return (
     <View>
-      <Text>{question.title}</Text>
-      <TextInput
-        enabled={enabled}
-        mode="outlined"
-        multiline={true}
-        value={question.user}
-        onChangeText={text => {
-          paper.questions[index].user = text;
-          setPaper(paper);
-        }}
-      />
+      <Text className="text-xl text-center mb-5">简答题</Text>
+      <Text>{index+1}.{question.title}</Text>
+      <View>
+        <TextInput
+          enabled={enabled}
+          className="w-full border p-2 my-5 rounded-sm"
+          multiline={true}
+          value={answer}
+          onChangeText={text => {
+            setAnswer(text);
+            paper.answer(index, text);
+            setPaper(paper);
+          }}
+        />
+      </View>
     </View>
   );
 };
@@ -136,6 +178,15 @@ const Quiz = ({paper, setPaper, index, mode}) => {
     case questionType.CHOICES:
       return (
         <Choice paper={paper} mode={mode} setPaper={setPaper} index={index} />
+      );
+    case questionType.MULTICHOICES:
+      return (
+        <MultiChoices
+          paper={paper}
+          mode={mode}
+          setPaper={setPaper}
+          index={index}
+        />
       );
     case questionType.COMPLETE:
       return (

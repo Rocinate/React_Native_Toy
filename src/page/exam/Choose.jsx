@@ -3,9 +3,9 @@ import {View, TouchableHighlight, Text} from 'react-native'
 const Choose = props => {
   const {navigation} = props;
   return (
-    <View className="flex-1 h-full justify-center items-center flex-row">
+    <View className="flex-1 h-full justify-center items-center flex-row bg-white">
       <TouchableHighlight
-        className="w-1/2 h-full"
+        className="w-1/2 h-full bg-white"
         underlayColor="#DDD"
         onPress={() => {
           navigation.navigate("登录", {mode: 'exam'})

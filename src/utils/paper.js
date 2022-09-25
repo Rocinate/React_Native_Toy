@@ -24,7 +24,6 @@ class Paper {
 
       if (
         item.type !== questionType.COMPLETE &&
-        item.user !== '' &&
         item.user === item.right
       ) {
         this.score[index] = scoreList[item.type];
@@ -44,6 +43,22 @@ class Paper {
 
   answer(index, user) {
     this.questions[index].user = user;
+  }
+
+  // 检查问卷是否完成
+  check() {
+    for (let i = 0; i < this.questions.length; i++) {
+      if (this.questions[i].type != questionType.COMPLETE) {
+        if (this.questions[i].user == '') {
+          return [false, i];
+        }
+      } else {
+        if (this.questions[i].user.some(item => item == '')) {
+          return [false, i];
+        }
+      }
+    }
+    return [true, -1];
   }
 
   async randomInit(type) {
@@ -71,7 +86,7 @@ class Paper {
         right: questionBank.multiChoices[index].right,
         title: questionBank.multiChoices[index].title,
         type: questionType.MULTICHOICES,
-        user: [],
+        user: '',
       });
     });
     // 填空题
@@ -88,6 +103,7 @@ class Paper {
     selectedIndex = this.getRandomIndex(10, questionBank.judgement.length);
     selectedIndex.forEach(index => {
       questions.push({
+        options: ['是', '否'],
         right: questionBank.judgement[index].right,
         title: questionBank.judgement[index].title,
         type: questionType.JUDGEMENT,
@@ -121,5 +137,5 @@ class Paper {
 }
 
 module.exports = {
-  Paper
+  Paper,
 };

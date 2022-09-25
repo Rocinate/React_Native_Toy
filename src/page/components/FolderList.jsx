@@ -1,5 +1,4 @@
 import {View, Text, ScrollView, TouchableHighlight} from 'react-native';
-import {ListItem, Button} from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const Empty = () => {

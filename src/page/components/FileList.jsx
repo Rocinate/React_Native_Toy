@@ -3,12 +3,11 @@ import LoadingPage from './LoadingPage';
 import {getPathList, getRootFiles} from '../../utils/fileSystem';
 import {PATH_TYPE} from '../../config/config';
 import {View, Text, ScrollView} from 'react-native';
-import {ListItem, Button} from '@rneui/themed';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 const Empty = () => {
   return (
-    <View className="flex-1 h-full justify-center items-center">
+    <View className="flex-1 h-full justify-center items-center bg-white">
       <Text>该文件夹下暂时没有文件，请联系管理员添加</Text>
     </View>
   );
@@ -35,7 +34,7 @@ const FileList = props => {
         <Empty />
       ) : (
         <ScrollView>
-          <View className="flex-1 p-5 w-full flex-wrap flex-row">
+          <View className="flex-1 p-5 w-full flex-wrap flex-row bg-white">
             {fileList.map(item => (
               <TouchableHighlight
                 className="w-1/6"

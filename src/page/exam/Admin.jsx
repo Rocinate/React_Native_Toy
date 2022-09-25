@@ -18,18 +18,17 @@ const Admin = ({navigation}) => {
   const [paperList, setPaperList] = useState([]);
   const [searchList, setSearchList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
-
-  const updateSearch = (search) => {
+  const updateSearch = search => {
     setSearch(search);
-  }
+  };
 
   useEffect(() => {
     getPathList(FOLDER_PATH.PAPER, PATH_TYPE.FILE).then(res => {
       // setPaperList(res);
       setPaperList(res);
-      setSearchList([1, 2]);
+      setSearchList(res);
       setLoading(false);
     });
   }, []);
@@ -41,12 +40,35 @@ const Admin = ({navigation}) => {
         <Empty />
       ) : (
         <>
-          <SearchBar
-            placeholder="姓名"
-            onChangeText={updateSearch}
-            value={search}
-            lightTheme
-          />
+          <ScrollView>
+            <SearchBar
+              placeholder="姓名"
+              onChangeText={updateSearch}
+              value={search}
+              lightTheme
+            />
+            <View className="flex flex-row justify-between p-5">
+              <Text className="flex-1 text-xl">姓名</Text>
+              <Text className="flex-1 text-xl">当前得分</Text>
+              <Text className="flex-1 text-xl">批阅</Text>
+              <Text className="flex-1 text-xl">答卷时间</Text>
+            </View>
+            {searchList.map(item => (
+              <TouchableHighlight
+                onPress={item => {
+                  navigation.navigate('考试', {
+                    mode: item.done ? 'judge' : 'history',
+                    paper: item,
+                  });
+                }}
+                key={item.time}>
+                <Text>{item.name}</Text>
+                <Text>{item.score}</Text>
+                <Text>{item.time}</Text>
+                <Text>{item.done}</Text>
+              </TouchableHighlight>
+            ))}
+          </ScrollView>
         </>
       )}
     </>

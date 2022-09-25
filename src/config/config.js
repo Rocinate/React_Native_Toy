@@ -17,8 +17,8 @@ export const scoreList = [2, 1, 2, 2, 5]
 
 export const questionType = {
   CHOICES: 0,
-  COMPLETE: 1,
-  MULTICHOICES: 2,
+  MULTICHOICES: 1,
+  COMPLETE: 2,
   JUDGEMENT: 3,
   SUBJECTIVE: 4,
 };
