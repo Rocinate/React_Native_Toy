@@ -1,5 +1,6 @@
 import {TouchableHighlight} from 'react-native';
 import Video from 'react-native-video';
+import {useState} from 'react'
 
 const FileViewer = ({navigation, route}) => {
   const path = route.params.path;
@@ -9,12 +10,12 @@ const FileViewer = ({navigation, route}) => {
     <TouchableHighlight
       onPress={() => setPaused(!paused)}
       underlayColor="#DDD"
-      className="w-full v-full">
+      className="w-full h-full">
       <Video
         source={source}
         paused={paused}
         resizeMode="contain"
-        className="w-full v-full"
+        className="w-full h-full"
       />
     </TouchableHighlight>
   );

@@ -7,7 +7,6 @@ export const getPathList = async (path, type) => {
   const list = await RNFS.readDir(fullPath);
 
   let result = [];
-
   if (list && list.length > 0) {
     let files = [];
     if (type == PATH_TYPE.FILE) {

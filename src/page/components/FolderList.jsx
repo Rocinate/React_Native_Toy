@@ -24,7 +24,11 @@ const FolderList = props => {
                 className="w-1/6"
                 key={item.name}
                 onPress={() => {
-                  navigation.navigate('文件列表', {path: item.path});
+                  if(item.path.indexOf('video') !== -1) {
+                    navigation.navigate('视频列表', {path: item.path});
+                  } else {
+                    navigation.navigate('文件列表', {path: item.path});
+                  }
                 }}
                 underlayColor="#DDD">
                 <View className="flex items-center py-5">

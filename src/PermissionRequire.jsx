@@ -37,6 +37,7 @@ const PermissionRequire = props => {
           setProgress(Status.initAssets);
           await initAssets();
         }
+        await createTemplate()
         setReady(true);
       } else {
         setProgress(Status.permissionFailed);

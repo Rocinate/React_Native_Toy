@@ -36,7 +36,7 @@ const Controller = ({
         ) : (
           <Button
             type="solid"
-            onPress={() => navigation.navigate('试卷管理')}
+            onPress={() => navigation.dispatch(StackActions.replace('试卷管理'))}
             disabled={disabled}>
             返 回
           </Button>
@@ -94,7 +94,7 @@ const Controller = ({
     } else {
       adminSubmit().then(res => {
         if (res) {
-          navigation.dispatch(StackActions.replace('试卷管理'));
+            navigation.dispatch(StackActions.replace('试卷管理'));
         }
       });
     }

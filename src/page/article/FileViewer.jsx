@@ -6,8 +6,8 @@ const FileViewer = ({navigation, route}) => {
   const source = {uri: path, cache: true};
 
   return (
-    <View className="w-full v-full">
-      <Pdf source={source} className="w-full v-full" />
+    <View className="w-full h-full bg-white">
+      <Pdf source={source} className="w-full h-full" />
     </View>
   );
 };

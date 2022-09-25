@@ -19,7 +19,7 @@ const VideoScreen = ({navigation}) => {
   }, []);
 
   return (
-    <View className="flex w-full bg-white">
+    <View className="flex w-full h-full bg-white">
       {loading ? (
         <LoadingPage />
       ) : (

@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import LoadingPage from './LoadingPage';
 import {getPathList, getRootFiles} from '../../utils/fileSystem';
 import {PATH_TYPE} from '../../config/config';
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, ScrollView, TouchableHighlight} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 const Empty = () => {
@@ -14,7 +14,7 @@ const Empty = () => {
 };
 
 const FileList = props => {
-  const {navigator, route} = props;
+  const {navigation, route} = props;
   const path = route.params.path;
   const [loading, setLoading] = useState(true);
   const [fileList, setFileList] = useState([]);
@@ -33,14 +33,18 @@ const FileList = props => {
       ) : fileList.length == 0 ? (
         <Empty />
       ) : (
-        <ScrollView>
+        <ScrollView className='h-min-full bg-white'>
           <View className="flex-1 p-5 w-full flex-wrap flex-row bg-white">
             {fileList.map(item => (
               <TouchableHighlight
                 className="w-1/6"
                 key={item.name}
                 onPress={() => {
-                  navigation.navigate('文件预览', {path: item.path});
+                  if (path.indexOf("video") !== -1) {
+                    navigation.navigate('视频预览', {path: item.path});
+                  } else {
+                    navigation.navigate('文件预览', {path: item.path});
+                  }
                 }}
                 underlayColor="#DDD">
                 <View className="flex items-center py-5">
