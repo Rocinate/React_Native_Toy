@@ -22,13 +22,23 @@ const Admin = ({navigation}) => {
 
   const updateSearch = search => {
     setSearch(search);
+    setSearchList(paperList.filter(item => item.name.indexOf(search)!==-1))
   };
 
   useEffect(() => {
     getPathList(FOLDER_PATH.PAPER, PATH_TYPE.FILE).then(res => {
-      // setPaperList(res);
-      setPaperList(res);
-      setSearchList(res);
+      const result = res.map(item => {
+        const part = item.name.split('.')[0].split('-');
+        return {
+          fileName: item.name,
+          name: part[0],
+          time: part[1],
+          done: part[2],
+          score: part[3],
+        };
+      });
+      setPaperList(result);
+      setSearchList(result);
       setLoading(false);
     });
   }, []);
@@ -40,82 +50,42 @@ const Admin = ({navigation}) => {
         <Empty />
       ) : (
         <>
-          <ScrollView>
+          <ScrollView className="min-h-full bg-white">
             <SearchBar
               placeholder="姓名"
               onChangeText={updateSearch}
               value={search}
               lightTheme
             />
-            <View className="flex flex-row justify-between p-5">
-              <Text className="flex-1 text-xl">姓名</Text>
-              <Text className="flex-1 text-xl">当前得分</Text>
-              <Text className="flex-1 text-xl">批阅</Text>
-              <Text className="flex-1 text-xl">答卷时间</Text>
+            <View className="flex flex-row justify-between p-5 border-b ">
+              <Text className="w-1/4 text-xl">姓名</Text>
+              <Text className="w-1/4 text-xl">当前得分</Text>
+              <Text className="w-1/4 text-xl">批阅</Text>
+              <Text className="w-1/4 text-xl">答卷时间</Text>
             </View>
             {searchList.map(item => (
               <TouchableHighlight
-                onPress={item => {
+                onPress={() => {
                   navigation.navigate('考试', {
-                    mode: item.done ? 'judge' : 'history',
-                    paper: item,
+                    mode: item.done=="0" ? 'judge' : 'history',
+                    fileName: item.fileName,
+                    name: item.name
                   });
                 }}
-                key={item.time}>
-                <Text>{item.name}</Text>
-                <Text>{item.score}</Text>
-                <Text>{item.time}</Text>
-                <Text>{item.done}</Text>
+                key={item.time}
+                underlayColor="#DDD">
+                <View className="flex flex-row justify-between p-5 border-b">
+                  <Text className="w-1/4 text-xl">{item.name}</Text>
+                  <Text className="w-1/4 text-xl">{item.score}</Text>
+                  <Text className="w-1/4 text-xl">{item.done}</Text>
+                  <Text className="w-1/4 text-xl">{item.time}</Text>
+                </View>
               </TouchableHighlight>
             ))}
           </ScrollView>
         </>
       )}
     </>
-    // <View style={styles.container}>
-    //   <Search />
-    //   <ScrollView>
-    //     <View style={styles.listItem}>
-    //       <Text style={styles.listDetail}>姓名</Text>
-    //       <Text style={styles.listDetail}>当前得分</Text>
-    //       <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-    //         <Text>审阅状态</Text>
-    //         {/* <ToggleButton
-    //           icon="filter"
-    //           onPress={() => {
-    //             setFilter(!filter);
-    //             search(keyword);
-    //           }}
-    //         /> */}
-    //       </View>
-    //       <Text style={styles.listDetail}>答卷时间</Text>
-    //       <Text style={styles.listDetail}>操作</Text>
-    //     </View>
-    //     {showPaper.length > 0 ? (
-    //       showPaper.map((item, index) => (
-    //         <TouchableHighlight
-    //           onPress={() => {
-    //             getPaperDetail(item.fileName), navigation.navigate('Paper');
-    //           }}
-    //           onLongPress={() => {
-    //             deletePaper(item.fileName).then(loadPaperList());
-    //           }}
-    //           underlayColor="#DDD"
-    //           key={index}>
-    //           <View style={styles.listItem}>
-    //             <Text style={styles.listDetail}>{item.userName}</Text>
-    //             <Text style={styles.listDetail}>{item.score}</Text>
-    //             <Text style={styles.listDetail}>{item.status}</Text>
-    //             <Text style={styles.listDetail}>{item.time}</Text>
-    //             <Button style={styles.listDetail}>导出</Button>
-    //           </View>
-    //         </TouchableHighlight>
-    //       ))
-    //     ) : (
-    //       <Text style={styles.loading}>无试卷记录</Text>
-    //     )}
-    //   </ScrollView>
-    // </View>
   );
 };
 

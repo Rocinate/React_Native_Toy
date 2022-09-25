@@ -65,7 +65,7 @@ const MultiChoices = ({paper, mode, setPaper, index}) => {
 
 const Complete = ({paper, mode, setPaper, index}) => {
   const question = paper.questions[index];
-  const enabled = mode == 'normal' ? true : false;
+  const editable = mode == 'normal' ? true : false;
   const [answer, setAnswer] = useState('');
   const part = question.title.split('_').filter(item => item);
 
@@ -87,7 +87,7 @@ const Complete = ({paper, mode, setPaper, index}) => {
         <Text>①</Text>
         <TextInput
           className="w-full p-0 pl-2 m-0 border-b-slate-900 border-b"
-          enabled={enabled}
+          editable={editable}
           dense={true}
           onChangeText={text => {
             setAnswer([text, answer[1]]);
@@ -101,7 +101,7 @@ const Complete = ({paper, mode, setPaper, index}) => {
         <Text>②</Text>
         <TextInput
           className="w-full p-0 m-0 pl-2 border-b-slate-900 border-b"
-          enabled={enabled}
+          editable={editable}
           mode="outlined"
           onChangeText={text => {
             setAnswer([answer[0], text]);
@@ -145,7 +145,7 @@ const Judgement = ({paper, mode, setPaper, index}) => {
 
 const Subjective = ({paper, mode, setPaper, index}) => {
   const question = paper.questions[index];
-  const enabled = mode == 'normal' ? true : false;
+  const editable = mode == 'normal' ? true : false;
   const [answer, setAnswer] = useState('');
 
   useEffect(() => {
@@ -158,7 +158,7 @@ const Subjective = ({paper, mode, setPaper, index}) => {
       <Text>{index+1}.{question.title}</Text>
       <View>
         <TextInput
-          enabled={enabled}
+          editable={editable}
           className="w-full border p-2 my-5 rounded-sm"
           multiline={true}
           value={answer}

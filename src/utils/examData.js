@@ -77,14 +77,14 @@ export const loadPaperDetail = async (
   successCb = undefined,
   failCb = undefined,
 ) => {
-  const fullPath = `${RNFS.DocumentDirectoryPath}${BASE}${FOLDER_PATH.PAPER}/${name}`;
+  const fullPath = `${RNFS.ExternalStorageDirectoryPath}${BASE}${FOLDER_PATH.PAPER}/${name}`;
   const isExist = await isPathExist(fullPath);
 
   if (!isExist) {
     return false;
   }
 
-  return await RNFS.readFile(filePath)
+  return await RNFS.readFile(fullPath)
     .then(result => {
       const res = JSON.parse(result);
       successCb && successCb(result);
@@ -99,7 +99,9 @@ export const loadPaperDetail = async (
 // 删除试卷
 export const deletePaper = async name => {
   const fullPath = `${RNFS.ExternalStorageDirectoryPath}${BASE}${FOLDER_PATH.PAPER}/${name}`;
-  const isExist = await this.isFileExist(fullPath);
+  const isExist = await isPathExist(fullPath);
+  console.log(name)
+  console.log(isExist)
 
   if (!isExist) {
     return false;
@@ -132,7 +134,7 @@ export const writePaper = async (data, name) => {
     const jsonStr = JSON.stringify(data);
     let filePath = '';
     if (data.fileName != '') {
-      deletePaper(data.fileName);
+      await deletePaper(data.fileName);
       let score = data.score.reduce(function (acr, cur) {
         return acr + cur;
       });
@@ -145,7 +147,7 @@ export const writePaper = async (data, name) => {
       let score = data.score.reduce(function (acr, cur) {
         return acr + cur;
       });
-      filePath = `${getFullPath(FOLDER_PATH.PAPER)}/${name}-${new Date().getTime()}-${0}-${score}.json`;
+      filePath = `${getFullPath(FOLDER_PATH.PAPER)}/${name}-${new Date().getTime()}-${0}-${score}`;
     }
     // 文件写入
     return await RNFS.writeFile(filePath, jsonStr, 'utf8');
