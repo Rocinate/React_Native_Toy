@@ -1,5 +1,8 @@
 export const BASE = '/Documents/StudyMaterials';
 
+// 鬼华为平板路径居然是小写的，不能理解
+// export const BASE = '/StudyMaterials';
+
 export const FOLDER_PATH = {
   PAPER: '/paper',
   QUESTION: '/question',

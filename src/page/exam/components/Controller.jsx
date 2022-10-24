@@ -120,7 +120,7 @@ const Controller = ({
           <Submit />
         )}
       </View>
-      {mode != 'exam' && index >= 35 ? (
+      {mode != 'normal' && index >= 35 ? (
         <ButtonGroup
           buttons={['0', '1', '2', '3', '4', '5']}
           disabled={mode=='history'}
