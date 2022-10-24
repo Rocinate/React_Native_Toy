@@ -16,8 +16,8 @@ class Paper {
   }
 
   preJudge() {
-    for (let i = 0; i < this.questions.length; i++) {
-      const item = this.questions[i];
+    for (let index = 0; index < this.questions.length; index++) {
+      const item = this.questions[index];
       if (item.type == questionType.SUBJECTIVE) {
         continue;
       }

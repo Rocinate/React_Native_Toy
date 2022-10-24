@@ -48,8 +48,8 @@ const Controller = ({
   const userSubmit = async() => {
     setDisable(true);
     let checkResult = paper.check();
+    console.log(checkResult)
     if (checkResult[0]) {
-    // if (true) {
       paper.preJudge();
       await writePaper(
         {
@@ -107,7 +107,6 @@ const Controller = ({
           <Text>请完成所有题目，即将返回第{index + 1}题</Text>
         </Dialog>
         <Button
-          // type="outline"
           disabled={index == 0}
           onPress={() => setIndex(index - 1)}>
           上一题

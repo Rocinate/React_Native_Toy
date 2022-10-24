@@ -5,6 +5,8 @@ import LoadingPage from '../components/LoadingPage';
 import {Button, SearchBar} from '@rneui/themed';
 import {getPathList} from '../../utils/fileSystem';
 import {PATH_TYPE, FOLDER_PATH} from '../../config/config';
+import moment from 'moment';
+import 'moment/locale/zh-cn'
 
 const Empty = () => {
   return (
@@ -32,11 +34,12 @@ const Admin = ({navigation}) => {
         return {
           fileName: item.name,
           name: part[0],
-          time: part[1],
+          time: parseInt(part[1]),
           done: part[2],
           score: part[3],
         };
       });
+      result.sort((a, b) => b.time - a.time)
       setPaperList(result);
       setSearchList(result);
       setLoading(false);
@@ -60,7 +63,7 @@ const Admin = ({navigation}) => {
             <View className="flex flex-row justify-between p-5 border-b ">
               <Text className="w-1/4 text-xl">姓名</Text>
               <Text className="w-1/4 text-xl">当前得分</Text>
-              <Text className="w-1/4 text-xl">批阅</Text>
+              <Text className="w-1/4 text-xl">已批阅</Text>
               <Text className="w-1/4 text-xl">答卷时间</Text>
             </View>
             {searchList.map(item => (
@@ -77,8 +80,8 @@ const Admin = ({navigation}) => {
                 <View className="flex flex-row justify-between p-5 border-b">
                   <Text className="w-1/4 text-xl">{item.name}</Text>
                   <Text className="w-1/4 text-xl">{item.score}</Text>
-                  <Text className="w-1/4 text-xl">{item.done}</Text>
-                  <Text className="w-1/4 text-xl">{item.time}</Text>
+                  <Text className="w-1/4 text-xl">{item.done === '1' ? "是": "否"}</Text>
+                  <Text className="w-1/4 text-xl">{moment(item.time).locale('zh-cn').format('lll')}</Text>
                 </View>
               </TouchableHighlight>
             ))}

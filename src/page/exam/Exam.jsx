@@ -52,7 +52,7 @@ const Exam = ({navigation, route}) => {
   }
   return (
     <ScrollView className="bg-white h-full w-full">
-      {mode == 'exam' ? (
+      {mode == 'normal' ? (
         <View>
           <LinearProgress value={index / paper.questions.length} />
           <Timer />
