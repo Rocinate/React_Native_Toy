@@ -36,7 +36,7 @@ const Exam = ({navigation, route}) => {
         setLoading(false);
 
         if (mode == 'judge') {
-          setIndex(35);
+          setIndex(40);
         }
       });
     } else {

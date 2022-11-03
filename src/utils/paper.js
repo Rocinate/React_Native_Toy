@@ -68,7 +68,7 @@ class Paper {
     let questions = [];
 
     // 单选题
-    selectedIndex = this.getRandomIndex(10, questionBank.choices.length);
+    selectedIndex = this.getRandomIndex(15, questionBank.choices.length);
     selectedIndex.forEach(index => {
       questions.push({
         options: questionBank.choices[index].options,

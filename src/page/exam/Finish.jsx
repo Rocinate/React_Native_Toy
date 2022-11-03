@@ -19,7 +19,7 @@ const Finish = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.info}>答题已完成，将在{second}秒后回到登录界面</Text>
+            <Text style={styles.info}>答题已完成，将在{second}秒后回到初始界面</Text>
         </View>
     )
 }

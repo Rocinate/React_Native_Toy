@@ -119,7 +119,7 @@ const Controller = ({
           <Submit />
         )}
       </View>
-      {mode != 'normal' && index >= 35 ? (
+      {mode != 'normal' && index >= 40 ? (
         <ButtonGroup
           buttons={['0', '1', '2', '3', '4', '5']}
           disabled={mode=='history'}
@@ -130,9 +130,9 @@ const Controller = ({
             setPaper(paper);
           }}
         />
-      ) : (
-        <></>
-      )}
+      ) : mode != 'normal' && index < 40 ? (
+        <Text>得分: {paper.score[index]}</Text>
+      ): <></>}
     </>
   );
 };
