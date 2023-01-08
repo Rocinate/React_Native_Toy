@@ -16,7 +16,7 @@ export const PATH_TYPE = {
   FOLDER: 'folder',
 };
 
-export const scoreList = [2, 1, 2, 2, 5]
+export const scoreList = [2, 2, 1, 2, 5]
 
 export const questionType = {
   CHOICES: 0,
@@ -26,4 +26,4 @@ export const questionType = {
   SUBJECTIVE: 4,
 };
 
-export const adminPass = "1"
+export const adminPass = "fhd@392193"

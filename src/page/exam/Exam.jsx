@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, AppState, ToastAndroid} from 'react-native';
 import {LinearProgress} from '@rneui/themed';
+import {StackActions} from '@react-navigation/native';
 
 import Quiz from './components/Quiz';
 import Timer from './components/Timer';
@@ -27,6 +28,18 @@ const Exam = ({navigation, route}) => {
   const [paper, setPaper] = useState(new Paper());
   const [index, setIndex] = useState(0);
 
+  const exitHandler = (nextAppState) => {
+    if (nextAppState === 'background' && route.name === '考试') {
+      ToastAndroid.showWithGravity(
+        '退出应用，考试结束',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+        );
+
+      navigation && navigation.dispatch(StackActions.popToTop());
+    }
+  };
+
   // 随机生成试卷
   useEffect(() => {
     if (fileName) {
@@ -44,6 +57,18 @@ const Exam = ({navigation, route}) => {
         setPaper(paper);
         setLoading(false);
       });
+    }
+
+    // 防止应用退出
+    var exitHandle = null
+    if (mode === 'normal') {
+      exitHandle = AppState.addEventListener('change', exitHandler)
+    }
+
+    return () => {
+      if (exitHandle) {
+        exitHandle.remove()
+      }
     }
   }, []);
 

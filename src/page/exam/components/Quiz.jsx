@@ -25,7 +25,10 @@ const Choice = ({paper, mode, setPaper, index}) => {
           paper.answer(index, String.fromCharCode(65 + value));
           setPaper(paper);
         }}
-        containerStyle={{marginBottom: 20, marginTop: 20}}
+        innerBorderStyle={{color: 'rgba(1,1,1,0)'}}
+        buttonStyle={{padding: 5}}
+        buttonContainerStyle={{borderColor: 'rgb(227,227,227)', borderWidth: 1, marginBottom: 2}}
+        containerStyle={{marginBottom: 20, marginTop: 20, display: 'flex', flexDirection: 'column', height: 'auto', borderWidth: 0}}
       />
     </View>
   );
@@ -57,7 +60,10 @@ const MultiChoices = ({paper, mode, setPaper, index}) => {
           paper.answer(index, user.join(''));
           setPaper(paper);
         }}
-        containerStyle={{marginBottom: 20, marginTop: 20}}
+        innerBorderStyle={{color: 'rgba(1,1,1,0)'}}
+        buttonStyle={{padding: 5}}
+        buttonContainerStyle={{borderColor: 'rgb(227,227,227)', borderWidth: 1, marginBottom: 2}}
+        containerStyle={{marginBottom: 20, marginTop: 20, display: 'flex', flexDirection: 'column', height: 'auto', borderWidth: 0}}
       />
     </View>
   );
@@ -137,7 +143,10 @@ const Judgement = ({paper, mode, setPaper, index}) => {
           paper.answer(index, question.options[value]);
           setPaper(paper);
         }}
-        containerStyle={{marginBottom: 20, marginTop: 20}}
+        innerBorderStyle={{color: 'rgba(1,1,1,0)'}}
+        buttonStyle={{padding: 5}}
+        buttonContainerStyle={{borderColor: 'rgb(227,227,227)', borderWidth: 1, marginBottom: 2}}
+        containerStyle={{marginBottom: 20, marginTop: 20, display: 'flex', flexDirection: 'column', height: 'auto', borderWidth: 0}}
       />
     </View>
   );

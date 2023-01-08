@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, AppState} from 'react-native';
 import {Button, Dialog} from '@rneui/themed';
 import {StackActions} from '@react-navigation/native';
 import {writePaper} from '../../../utils/examData';
